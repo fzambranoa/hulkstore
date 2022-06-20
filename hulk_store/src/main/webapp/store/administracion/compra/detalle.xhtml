@@ -1,0 +1,132 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+
+<p:panel id="field_detalle" style="margin-top: 5px">
+	<f:facet name="header">
+		<div style="display: table; width: 100%">
+			<div style="display: table-cell;">
+				<h:outputLabel style="font-size: 16px; font-weight; bold; color:#0D89EC " value="Registro Factura de Compra"/>
+			</div>
+			<div style="display: table-cell; text-align: right">
+				<p:commandButton icon="pi pi-save" value="Guardar" action="#{compra.registrarCompra}" update="compra_form" styleClass="ui-button-guardar"/>
+				<p:spacer width="2px"/>
+				<p:commandButton icon="pi pi-times" value="Cancelar" action="#{compra.reset}" update="compra_form" styleClass="ui-button-cancela"/>
+				<p:spacer width="2px"/>
+				<p:commandButton icon="pi pi-list" value="Reporte" action="#{compra.cambiarModo('REPORTE')}" update="compra_form" styleClass="ui-button-reporte"/>
+			</div>
+		</div>
+	</f:facet>
+	<div class="ui-fluid">
+		<p:panelGrid id="doc_grid" columns="4"
+			columnClasses="ui-g-12 ui-md-2, ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-4"
+			styleClass="ui-panelgrid-blank ui-fluid" layout="grid">
+
+			<h:outputLabel value="* Fecha Emisión: " styleClass="txtblue12" />
+			<p:calendar value="#{compra.facturaCompra.fechaFactura}" styleClass="input12" pattern="dd-MM-yyyy"/>
+
+			<h:outputLabel value="* Num. Comprobante: " styleClass="txtblue12" />
+			<p:inputMask value="#{compra.facturaCompra.numeroDocumento}"
+				styleClass="input12" mask="999-999-999999999" maxlength="17"/>
+
+			<h:outputLabel value="* Valor Documento: " styleClass="txtblue12" />
+			<p:inputText value="#{compra.facturaCompra.importeTotal}"
+				styleClass="input12" onkeypress="return soloNumeros(event)"
+				placeholder="0,00" disabled="#{factCompra.obtenidoDeXml}">
+				<f:convertNumber pattern="##.00" />
+			</p:inputText>
+			
+			<h:outputLabel value="* Valor Impuesto: " styleClass="txtblue12" />
+			<p:inputText value="#{compra.facturaCompra.impuestoTotal}"
+				styleClass="input12" onkeypress="return soloNumeros(event)"
+				placeholder="0,00" disabled="#{factCompra.obtenidoDeXml}">
+				<f:convertNumber pattern="##.00" />
+			</p:inputText>
+		</p:panelGrid>
+	</div>
+
+	<!--  TABLA -->
+	<p:dataTable id="tabla_detalle" var="gas" value="#{compra.detallesCompra}" rowIndexVar="index"  styleClass="lbl10px" reflow="true" editable="true" editMode="cell">
+		<f:facet name="header">
+			<div style="width: 100%; text-align: right">
+				<p:commandButton value="Agregar" icon="pi pi-plus" action="#{compra.agregarDetalle}" update="tabla_detalle"/>
+			</div>
+		</f:facet>
+		<p:column width="5%" style="text-align: center">
+			<f:facet name="header">
+				<h:outputText value="Número" styleClass="lbl11bpx" />
+			</f:facet>
+			<h:outputText value="#{index+1}" styleClass="lbl11bpx" />
+		</p:column>
+		<p:column width="5%" style="text-align: center">
+			<f:facet name="header">
+				<h:outputText value="Cantidad" styleClass="lbl11bpx" />
+			</f:facet>
+			<p:cellEditor >
+				<f:facet name="output">
+					<h:outputText value="#{gas.cantidad}" styleClass="lbl11bpx">
+						<f:convertNumber pattern="#0" />
+					</h:outputText>
+				</f:facet>
+				<f:facet name="input">
+					<p:inputText value="#{gas.cantidad}" onkeypress="return soloNumerosNoCaracteres(event)" style="width: 50px">
+						<f:convertNumber pattern="#0" />
+					</p:inputText>
+				</f:facet>
+			</p:cellEditor>
+		</p:column>
+		<p:column style="text-align: center">
+			<f:facet name="header">
+				<h:outputText value="Descripción" styleClass="lbl11bpx" />
+			</f:facet>
+			<p:selectOneMenu value="#{gas.idProducto}" style="width:100%" >
+				<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
+				<f:selectItems var="prd" value="#{compra.productos}" itemLabel="#{prd.nombre}" itemValue="#{prd.id}" />
+			</p:selectOneMenu>
+		</p:column>
+
+		<p:column style="text-align: center">
+			<f:facet name="header">
+				<h:outputText value="Precio unitario" styleClass="lbl11bpx" />
+			</f:facet>
+			<p:cellEditor>
+				<f:facet name="output">
+					<h:outputText value="#{gas.precioUnitario}" styleClass="lbl11bpx" >
+						<f:convertNumber pattern="#0.000000" />
+					</h:outputText>
+				</f:facet>
+				<f:facet name="input">
+					<p:inputText value="#{gas.precioUnitario}" styleClass="input12" placeholder="0,00" onkeypress="return soloNumeros(event)">
+						<f:convertNumber pattern="#0.000000" />
+					</p:inputText>
+				</f:facet>
+			</p:cellEditor>
+		</p:column>
+
+		<p:column style="text-align: center">
+			<f:facet name="header">
+				<h:outputText value="Valor" styleClass="lbl11bpx" />
+			</f:facet>
+			<p:cellEditor>
+				<f:facet name="output">
+					<h:outputText value="#{gas.valorTotal}" styleClass="lbl11bpx">
+						<f:convertNumber pattern="#0.00" />
+					</h:outputText>
+				</f:facet>
+				<f:facet name="input">
+					<p:inputText value="#{gas.valorTotal}" styleClass="input12" placeholder="0,00" onkeypress="return soloNumeros(event)">
+						<f:convertNumber pattern="#0.00" />
+					</p:inputText>
+				</f:facet>
+			</p:cellEditor>
+		</p:column>
+		<p:column style="text-align: center" width="5%">
+			<p:commandButton icon="pi pi-trash" action="#{compra.eliminarDetalle(gas)}" update="tabla_detalle" />
+		</p:column>
+	</p:dataTable>
+
+</p:panel>
+</html>

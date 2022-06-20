@@ -1,0 +1,69 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:body>
+		<div class="row">
+			<div class="col-70" >
+				<h:panelGroup style="width: 90%;" rendered="#{null ne store.detallesOrden and !empty store.detallesOrden}">
+					<div style="padding: 0.5em; border-bottom: 1px solid #DDDDDD; background-color: #FFF">
+						<p class="txt_negro26b">Resumen de Compra </p>
+						<div style="width: 100%; text-align: right ">
+							<span style="padding-right: 10px;color: #8A8B8B; font-size: 14px; font-weight: bold">Precio</span>
+						</div>
+					</div>
+					<ui:repeat var="item" value="#{store.detallesOrden}">
+						<p:panelGrid columns="3" columnClasses="ui-g-12 ui-lg-3, ui-g-12 ui-lg-6, ui-g-12 ui-lg-3" styleClass="ui-panelgrid-blank ui-fluid" layout="grid"> 
+							<h:panelGroup style="vertical-align: top">
+								<p:card style="width: 15rem; margin-bottom: 2em; background-color: #E1E9F2; text-align: center">
+									<h:graphicImage value="#{item.producto.imagen}" width="70%" height="70%"/>
+								</p:card>
+							</h:panelGroup>
+							<h:panelGroup style="vertical-align: top">
+								<div style="font-size: 12px;padding-bottom: 15px; display: table-cell;vertical-align: top; width: 40%">
+									<div style="padding-bottom: 3px" class="txt_negro20b"><h:outputText value="#{item.producto.nombre}" /></div>
+									<div style="padding-bottom: 3px" class="txt_negro16b"><h:outputText value="#{item.producto.descripcion}" /></div>
+									<span style="font-weight: bold">Cantidad: </span> 
+									<h:outputText value="#{item.cantidad}" >
+										<f:convertNumber pattern="##0.00"/>
+									</h:outputText>
+								</div>
+							</h:panelGroup>
+							<h:panelGroup style="vertical-align: top; text-align: right">
+								<div style="padding-bottom: 3px;" class="txt_rojo18b">
+									$<h:outputText value="#{item.precioUnitario}" >
+										<f:convertNumber pattern="###.00"/>
+									</h:outputText>
+								</div>
+							</h:panelGroup>
+						</p:panelGrid>
+					</ui:repeat>
+				</h:panelGroup>
+			</div>
+			<div class="col-30" style="padding-left: 1.5em">
+				<h:panelGroup style="width: 90%;" rendered="#{null ne store.detallesOrden and !empty store.detallesOrden}">
+					<div style="display: table; min-height: 200px; width: 100%; padding: 2.5em; background-color: #FFF">
+						<p class="txt_negro16">Total Productos (#{store.detallesOrden.stream().map(item->(item.cantidad)).sum()})  </p>
+						<p class="txt_negro16">
+							<span class="txt_negro16">
+								Subtotal: $
+							</span>
+							<span class="txt_negro16b">
+								<h:outputLabel value="#{store.detallesOrden.stream().map(item->(item.valorTotal)).sum()}"  >
+									<f:convertNumber pattern="###0.00"/>
+								</h:outputLabel>
+							</span>
+						</p>
+						<div style="padding: 2em; text-align: center;">
+							<p:commandButton value="Procesar Orden" action="#{store.procesarOrden}" styleClass="ui-button-seleccion" style="width: 90%"/>
+						</div>
+					</div>
+				</h:panelGroup>
+			</div>
+		</div>		
+		<h:panelGroup rendered="#{null eq store.detallesOrden or empty store.detallesOrden}">
+			Tu carrito se encuentra vacio
+		</h:panelGroup>
+	</h:body>
+</html>

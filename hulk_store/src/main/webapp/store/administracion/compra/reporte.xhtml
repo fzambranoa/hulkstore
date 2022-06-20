@@ -1,0 +1,94 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<p:panel id="field_reporte" style="margin-top: 5px">
+		<f:facet name="header">
+		<div style="display: table; width: 100%">
+			<div style="display: table-cell;">
+				<h:outputLabel style="font-size: 16px; font-weight; bold; color:#0D89EC " value="Reporte Factura de Compra"/>
+			</div>
+			<div style="display: table-cell; text-align: right">
+				<p:commandButton icon="pi pi-print" value="Imprimir" styleClass="ui-button-guardar">
+					<p:printer target="compra_form:tbl_detalle" />
+				</p:commandButton>
+				<p:spacer width="2px"/>
+				<p:commandButton icon="pi pi-times" value="Cancelar" action="#{compra.reset}" update="compra_form" styleClass="ui-button-cancela"/>
+			</div>
+		</div>
+	</f:facet>
+		<p:panelGrid id="search_grid_r" columns="5" columnClasses="ui-g-12 ui-md-1, ui-g-12 ui-md-2, ui-g-12 ui-md-1, ui-g-12 ui-md-2, ui-g-12 ui-md-1"
+																										styleClass="ui-panelgrid-blank ui-fluid" layout="grid">
+			<h:outputLabel value="* Fecha Inicio:" styleClass="txtblue12" />
+			<p:datePicker value="#{compra.fechaInicio}" styleClass="input12" pattern="dd-MM-yyyy" style="max-width: 274px" />
+
+			<h:outputLabel value="* Fecha Fin:" styleClass="txtblue12" />
+			<p:datePicker value="#{compra.fechaFin}" styleClass="input12" pattern="dd-MM-yyyy" style="max-width: 274px" />
+			<p:commandButton action="#{compra.generarReporteCompras}" value="Buscar" icon="pi pi-search" update="grp_resultado" />
+		</p:panelGrid>
+		<br/>
+		<h:panelGroup id="grp_resultado">
+			<p:dataTable id="tbl_detalle" var="res" scrollable="true" scrollHeight="500" value="#{compra.reporte}" rowIndexVar="index" styleClass="lbl10px" style="width: 100%">
+				<p:column style="text-align:center" width="2%">
+					<f:facet name="header">
+						<h:outputText value="Num." styleClass="lbl11bpx" />
+					</f:facet>
+					<h:outputText value="#{index+1}" />
+				</p:column>
+
+				<p:column style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="Fecha Emisión" styleClass="lbl11bpx" />
+					</f:facet>
+					<h:outputLabel value="#{res.fechaFactura}">
+						<f:convertDateTime pattern="yyyy-MM-dd" />
+					</h:outputLabel>
+				</p:column>
+
+				<p:column style="text-align:center" width="7%">
+					<f:facet name="header">
+						<h:outputText value="Num. Factura" styleClass="lbl11bpx" />
+					</f:facet>
+					<h:outputText value="#{res.numeroDocumento}" />
+				</p:column>
+				<p:column style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="Base Imponible" styleClass="lbl11bpx" />
+					</f:facet>
+					<h:outputText
+						value="#{res.impuestoTotal - res.impuestoTotal}">
+						<f:convertNumber pattern="##.00" />
+					</h:outputText>
+				</p:column>
+				<p:column style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="Total Impuesto" styleClass="lbl11bpx" />
+					</f:facet>
+					<h:outputText
+						value="#{res.impuestoTotal}">
+						<f:convertNumber pattern="##.00" />
+					</h:outputText>
+				</p:column>
+				<p:column style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="Total Factura" styleClass="lbl11bpx" />
+					</f:facet>
+					<h:outputText
+						value="#{res.importeTotal}">
+						<f:convertNumber pattern="##.00" />
+					</h:outputText>
+				</p:column>
+
+				<p:column style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="Descripcion" styleClass="lbl11bpx" />
+					</f:facet>
+					<p:repeat var="det" value="#{res.detalles}">
+						<h:outputText value="#{det.idProducto}"/>;
+					</p:repeat>
+				</p:column>
+			</p:dataTable>
+		</h:panelGroup>
+	</p:panel>
+</html>

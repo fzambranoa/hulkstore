@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<p:carousel value="#{store.productos}" var="prd" numVisible="3" numScroll="3" responsiveOptions="#{store.responsiveOptions}">
+        <h:panelGroup id="grp_contenedor">
+           <div class="product-item">
+               <div class="product-item-content" style="background-color: #FFF">
+                   <div class="p-mb-3">
+                       <h:graphicImage value="#{prd.imagen}" styleClass="product-image" height="457"/>
+                   </div>
+                   <div>
+                       <h4 class="p-mb-1">#{prd.nombre}</h4>
+                       <h6 class="p-mt-0 p-mb-3">
+                           <h:outputText value="#{prd.precio}">
+                               <f:convertNumber type="currency" pattern="¤#0" currencySymbol="$" />
+                           </h:outputText>
+                       </h6>
+                       <!--  span class="product-badge status-#{product.inventoryStatus.name().toLowerCase()}">#{product.inventoryStatus.text}</span>-->
+                       <div class="p-mt-5">
+                           <p:commandButton icon="pi pi-shopping-cart" styleClass="rounded-button p-mr-2" action="#{store.agregarProducto(prd)}" 
+                           			process="grp_contenedor" update="store_form header_form"/>
+                           <p:commandButton icon="pi pi-star" styleClass="ui-button-success rounded-button p-mr-2" />
+                           <p:commandButton icon="pi pi-cog" styleClass="ui-button-help rounded-button" />
+                       </div>
+                   </div>
+               </div>
+           </div>
+		</h:panelGroup>
+	</p:carousel>
+</html>

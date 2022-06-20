@@ -1,0 +1,52 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:body>
+		<ui:composition template="/templates/base.xhtml">
+			<ui:define name="css">
+				<h:outputStylesheet library="css" name="store.css"/>
+			</ui:define>
+			<ui:define name="contenido">
+				<h:form id="store_form">
+					<p:messages id="msgs" showDetail="true" closable="true" style="font-size:12px" >
+						<p:autoUpdate />
+					</p:messages>
+					<ui:fragment rendered="#{store.modo eq 'LISTA'}">
+						<ui:include src="store/orden/lista.xhtml"/>
+					</ui:fragment>
+					<ui:fragment rendered="#{store.modo eq 'RESUMEN'}">
+						<ui:include src="store/orden/resumen.xhtml"/>
+					</ui:fragment>
+					<ui:fragment rendered="#{store.modo eq 'PAGO'}">
+						<ui:include src="store/orden/pago.xhtml"/>
+					</ui:fragment>
+					
+					<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+					<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+					    <p:graphicImage library="images" name="ajax-loader.gif" />
+					</p:dialog>
+					
+					<p:dialog id="login_dialog" widgetVar="login_dialog" modal="true" closable="true" resizable="false" position="top center">
+						<p:card style="width: 25em">
+						    <f:facet name="header">
+						        <p:graphicImage library="images" name="login_emprty.png"/>
+						    </f:facet>
+							<h:panelGrid style="width: 100%">
+								<h:outputLabel value="Usuario:" styleClass="txt_negro14b"/>
+								<p:inputText value="#{app.alias}" placeholder="Ingrese su usuario" style="width: 100%"/>
+								<h:outputLabel value="Contraseña:" styleClass="txt_negro14b"/>
+								<p:password value="#{app.password}" placeholder="Ingrese su clave" style="width: 100%"/>
+							</h:panelGrid>						    	
+						
+						    <f:facet name="footer">
+						       <center> <p:commandButton icon="pi pi-unlock" value="Ingresar" action="#{app.ingresar}"/></center>
+						    </f:facet>
+						</p:card>
+					</p:dialog>
+				</h:form>
+			</ui:define>
+		</ui:composition>
+	</h:body> 
+</html>

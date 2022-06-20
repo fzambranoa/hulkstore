@@ -1,0 +1,30 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:body>
+		<ui:composition template="/templates/base.xhtml">
+			<ui:define name="header">
+				<ui:include src="/templates/adminheader.xhtml"/>
+			</ui:define>
+			<ui:define name="contenido">
+				<h:form id="compra_form">
+					<p:messages id="msgs" showDetail="true" closable="true" style="font-size:12px" >
+						<p:autoUpdate />
+					</p:messages>
+					<ui:fragment rendered="#{compra.modo eq 'REGISTRO'}">
+						<ui:include src="/store/administracion/compra/detalle.xhtml" />		
+					</ui:fragment>
+					<ui:fragment rendered="#{compra.modo eq 'REPORTE'}">
+						<ui:include src="/store/administracion/compra/reporte.xhtml" />
+					</ui:fragment>				
+					<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+					<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+					    <p:graphicImage library="images" name="ajax-loader.gif" />
+					</p:dialog>
+				</h:form>
+			</ui:define>
+		</ui:composition>		
+	</h:body>
+</html>

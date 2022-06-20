@@ -1,0 +1,112 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:body>
+		<div class="row">
+			<div class="col-70" >
+				<p:fieldset id="field_datos_generales">
+					<p:panelGrid columns="4" columnClasses="ui-g-12 ui-md-2, ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-4"
+																					styleClass="ui-panelgrid-blank ui-fluid" layout="grid">
+																					
+						<h:outputLabel value="* Razon Social: " styleClass="txtblue12" />
+						<p:calendar value="#{store.orden.razonSocial}" styleClass="input12" pattern="dd-MM-yyyy"/>
+			
+						<h:outputLabel value="* Identificacion: " styleClass="txtblue12" />
+						<p:inputText value="#{store.orden.identificacionCompra}" styleClass="input12" maxlength="13"/>
+			
+						<h:outputLabel value="* Correo Electrónico: " styleClass="txtblue12" />
+						<p:inputText value="#{store.orden.mail}" styleClass="input12" />
+						
+						<h:outputLabel value="* Telefono: " styleClass="txtblue12" />
+						<p:inputText value="#{store.orden.telefono}" styleClass="input12" maxlength="10"/>
+						
+						<h:outputLabel value="* Forma de Pago: " styleClass="txtblue12" />
+						<p:selectOneMenu value="#{store.orden.formaPago}" style="width:100%" >
+							<f:selectItem itemLabel="Seleccione" itemValue="#{null}" />
+							<f:selectItem itemLabel="Tarjeta Credito" itemValue="TARJETA_CREDITO" />
+							<f:selectItem itemLabel="Tarjeta Debito" itemValue="TARJETA_DEBITO" />
+							<f:selectItem itemLabel="Transferencia" itemValue="TRANSFERENCIA" />
+							<f:selectItem itemLabel="Descuento a Rol" itemValue="DESCUENTO_ROL" />
+						</p:selectOneMenu>
+						
+						<h:outputLabel value="* Direccion: " styleClass="txtblue12" />
+						<p:inputText value="#{store.orden.direccion}" styleClass="input12" maxlength="10"/>
+					</p:panelGrid>
+				</p:fieldset>
+				<br/>
+				<p:dataTable value="#{store.detallesOrden}" var="det" rowIndexVar="index"  styleClass="lbl10px" reflow="true">
+					<p:column width="5%" style="text-align: center">
+						<f:facet name="header">Num</f:facet>
+						<h:outputText value="#{index+1}" styleClass="lbl11bpx" />
+					</p:column>
+					<p:column style="text-align: center">
+						<f:facet name="header">Producto</f:facet>
+						<h:outputText value="#{det.producto.nombre}" styleClass="lbl11bpx" />
+					</p:column>
+					<p:column style="text-align: center">
+						<f:facet name="header">Cantidad</f:facet>
+						<h:outputText value="#{det.cantidad}" styleClass="lbl11bpx" />
+					</p:column>
+					<p:column style="text-align: center">
+						<f:facet name="header">Precio Unitario</f:facet>
+						<h:outputText value="#{det.precioUnitario}" styleClass="lbl11bpx" />
+					</p:column>
+					<p:column style="text-align: center">
+						<f:facet name="header">Total</f:facet>
+						<h:outputText value="#{det.valorTotal}" styleClass="lbl11bpx" />
+					</p:column>
+				</p:dataTable>
+			</div>
+			<div class="col-30" style="padding-left: 1em">
+				<p:fieldset id="totales">
+					<div style="padding: 0.5em; border-bottom: 1px solid #DDDDDD; background-color: #FFF">
+						<p class="txt_negro16b">Resumen del Pedido</p>						
+					</div>
+					<div style="display: table; width: 100%; padding-top: 1.5em; ">
+						<div style="font-size: 12px;padding-bottom: 5px; display: table-cell; width: 70%">
+							<div style="padding: 0 0 3px 2%">Items (#{store.detallesOrden.stream().map(item->(item.cantidad)).sum()})</div>
+						</div>
+						<div style="font-size: 12px; display: table-cell; text-align: right; padding-right: 5%">
+							<div style="padding-right: 2%">
+								$<h:outputLabel value="#{store.orden.subTotal}"  >
+									<f:convertNumber pattern="###0.00"/>
+								</h:outputLabel>
+							</div>
+						</div>
+					</div>
+					
+					<div style="display: table; width: 100%">
+						<div style="font-size: 12px;padding-bottom: 5px; display: table-cell; width: 70%">
+							<div style="padding: 0 0 3px 2%">Impuestos </div>
+						</div>
+						<div style="font-size: 12px;display: table-cell; text-align: right; padding-right: 5%">
+							<div style="border-bottom: 1px solid #EEEEEE; padding-bottom: 3px; padding-right: 5%">
+								$<h:outputLabel value="#{store.orden.valorImpuesto}"  >
+									<f:convertNumber pattern="###0.00"/>
+								</h:outputLabel>
+							</div>
+						</div>
+					</div>
+					<div style="width: 100%; border-bottom: 1px solid #EEEEEE; margin-bottom: 5px"/>
+					<div style="display: table; width: 100%; color: #ED1C24; padding-top: 1em; ">
+						<div style="font-size: 14px;padding-bottom: 5px; display: table-cell; width: 60%">
+							<div style="padding: 0 0 3px 3%">Total a pagar</div>
+						</div>
+						<div style="font-size: 14px; display: table-cell; text-align: right; padding-right: 5%">
+							<div style="padding-right: 5%">
+								$<h:outputLabel value="#{store.orden.valorTotal}"  >
+									<f:convertNumber pattern="###0.00"/>
+								</h:outputLabel>
+							</div>
+						</div>
+					</div>
+					<div style="padding: 2.5em; text-align: center">
+						<p:commandButton value="Confirmar Orden" action="#{store.confirmarOrden}" styleClass="ui-button-reporte" style="width: 90%"/>
+					</div>
+				</p:fieldset>
+			</div>
+		</div>
+	</h:body>
+</html>

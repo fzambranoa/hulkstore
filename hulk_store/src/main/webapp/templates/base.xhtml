@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<h:head>
+		<title><h:outputText value="hulkstore" /></title>
+		<h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+		<h:outputScript library="js" name="utils.js"  />
+		<h:outputScript library="js" name="dateutils.js"  />
+		<h:outputStylesheet library="css" name="texto.css"/>
+		<h:outputStylesheet library="css" name="componentes.css"/>
+		<h:outputStylesheet library="css" name="responsive.css"/>
+		
+		<ui:insert name="metadata">
+			
+		</ui:insert>
+		<ui:insert name="css">
+		</ui:insert>
+	</h:head>
+	<body>
+		<div id="div_contenido" style="clear: both;width: 100%; min-height: 600px;">
+			<ui:insert name="header">
+				<ui:include src="/templates/header.xhtml"/>
+			</ui:insert>
+			<ui:insert name="contenido">
+				
+			</ui:insert>
+		</div>	
+	</body>
+</html>

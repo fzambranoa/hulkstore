@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+	<h:body>
+		<h:form id="header_form">
+			<div style="width: 100%; display: table; padding: 0 ">
+				<div style="display: table-cell; width: 20%; background-color: #FFF">
+					<h:link outcome="home">
+						<h:graphicImage library="images" name="login_hulk.png" width="150px"/>
+						<h:graphicImage library="images" name="store.png" width="150px"/>
+					</h:link>
+				</div>
+				<div style="display: table-cell; width: 80%; background-color: #FFF; text-align: right; padding-right: 1.5em">
+					<h:outputLabel value="Administracion"/>
+					<h:outputLabel value="#{app.usuario.nombre}"/>					
+				</div>
+			</div>
+			 <div class="card" style="background-color: #000">
+			    <p:tabMenu activeIndex="#{param.i}">
+			        <p:menuitem value="Home" outcome="/home" icon="pi pi-fw pi-home">
+			            <f:param name="i" value="0"/>
+			        </p:menuitem>			        
+			    </p:tabMenu>
+			</div>
+		</h:form>
+	</h:body>
+</html>
